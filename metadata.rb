@@ -9,10 +9,9 @@ version           "0.9.0"
 supports 'ubuntu', '= 16.04'
 supports 'centos', '= 7.5'
 
-#depends           'magic_shell'
-#depends           'apache2'
+depends           'magic_shell'
 #depends           'ulimit'
-#depends           'java'
+depends           'java'
 
 recipe "cvat::install", "Installs  cvat"
 recipe "cvat::default", "Configures cvat"
