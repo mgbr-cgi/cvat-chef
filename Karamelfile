@@ -1,0 +1,7 @@
+dependencies: 
+  - recipe: cvat::install
+    global:  
+      - kagent::install
+  - recipe: cvat::default
+    global:  
+      - hops::dn
