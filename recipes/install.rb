@@ -115,7 +115,7 @@ end
 
 execute 'copy_requirements' do
   user node['cvat']['user']
-  command "cp -r #{cvat}/requirements/ /tmp/requirements/"
+  command "cp -r #{cvat}/cvat/requirements/ /tmp/requirements/"
   action :run
 end
 
