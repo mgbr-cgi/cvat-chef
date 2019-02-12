@@ -18,3 +18,105 @@ group hops_group do
   append true
 end
 
+home="/home/#{node['cvat']['user']}"
+DJANGO_CONFIGURATION=node['cvat']['django_config']
+
+bash "django_pip_install" do
+    user node['cvat']['user']
+    group node['cvat']['group']
+    code <<-EOF
+      pip3 install --no-cache-dir -r /tmp/requirements/#{DJANGO_CONFIGURATION}.txt             
+    EOF
+end
+
+
+
+bash "django_apt_update" do
+    user 'root'
+    code <<-EOF
+     apt-get update
+    apt-get install -y ssh netcat-openbsd curl zip 
+    wget -qO /dev/stdout https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
+    apt-get install -y git-lfs
+    git lfs install
+    rm -rf /var/lib/apt/lists/*
+    if [ -z ${socks_proxy} ]; then 
+        echo export "GIT_SSH_COMMAND=\"ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30\"" >> ${HOME}/.bashrc; 
+    else 
+        echo export "GIT_SSH_COMMAND=\"ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 -o ProxyCommand='nc -X 5 -x ${socks_proxy} %h %p'\"" >> ${HOME}/.bashrc;
+    fi
+
+    EOF
+end
+
+
+bash "openvino_update" do
+  user node['cvat']['user']
+  group node['cvat']['group']
+  code <<-EOF
+        mkdir ${HOME}/reid
+        wget https://download.01.org/openvinotoolkit/2018_R5/open_model_zoo/person-reidentification-retail-0079/FP32/person-reidentification-retail-0079.xml -O reid/reid.xml
+        wget https://download.01.org/openvinotoolkit/2018_R5/open_model_zoo/person-reidentification-retail-0079/FP32/person-reidentification-retail-0079.bin -O reid/reid.bin
+  EOF
+  only_if node['cvat']['openvino'] == "true"
+end    
+
+
+execute 'copy_ssh' do
+  user node['cvat']['user']
+  command "cp -r ssh #{home}/.ssh"
+  action :run
+end
+
+execute 'copy_cvat' do
+  user node['cvat']['user']
+  command "cp -r cvat #{home}/cvat"
+  action :run
+end
+
+execute 'copy_tests' do
+  user node['cvat']['user']
+  command "cp -r tests #{home}/tests"
+  action :run
+end
+
+execute 'patch' do
+  user node['cvat']['user']
+  command "RUN patch -p1 < ${HOME}/cvat/apps/engine/static/engine/js/3rdparty.patch"
+  action :run
+end
+
+
+execute 'patch' do
+  user node['cvat']['user']  
+  command "chown -R ${USER}:${USER} ."
+  action :run
+end
+
+execute 'chown' do
+  user 'root'
+  command "chown -R #{node['cvat']['user']}:#{node['cvat']['group']} ."
+  action :run
+end
+
+
+execute 'chown' do
+  user node['cvat']['user']  
+  command "mkdir data share media keys logs /tmp/supervisord"
+  action :run
+end
+
+
+execute 'chown' do
+  user node['cvat']['user']  
+  command "python3 manage.py collectstatic"
+  action :run
+end
+
+execute 'chown' do
+  user node['cvat']['user']  
+  command "python3 manage.py collectstatic"
+  action :run
+end
+#EXPOSE 8080 8443
+#ENTRYPOINT ["/usr/bin/supervisord"]
