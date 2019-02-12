@@ -94,23 +94,23 @@ execute 'run_openvino' do
   command "/tmp/components/openvino/install.sh"
   action :run
   environment ({'OPENVINO_TOOLKIT' => 'yes'})
-  only_if node['cvat']['openvino'] == "true"  
+  only_if { "#{node['cvat']['openvino']}" == "true"}
 end
 
 execute 'run_cuda' do
   user node['cvat']['user']
   command "/tmp/components/cuda/install.sh"
   action :run
-  only_if node['cvat']['cuda'] == "true"
   environment ({'CUDA_SUPPORT' => 'yes'})  
+  only_if { "#{node['cvat']['cuda']}" == "true" }
 end
 
 execute 'run_tf_annotation' do
   user node['cvat']['user']
   command "bash -i /tmp/components/tf_annotation/install.sh"
   action :run
-  only_if node['cvat']['tf_annotation'] == "true"
   environment ({'TF_ANNOTATION' => 'yes', 'TF_ANNOTATION_MODEL_PATH'=>"#{home}/rcnn/inference_graph"})  
+  only_if { "#{node['cvat']['tf_annotation']}" == "true"}
 end
 
 execute 'copy_requirements' do
