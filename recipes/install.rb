@@ -58,10 +58,7 @@ package "python3-pip"
 package "unzip"
 package "unrar"
 package "p7zip-full"
-package "vi"
 package "git"
-
-#    rm -rf /var/lib/apt/lists/*
 
 
 apt_repository 'xerus-media' do
@@ -74,12 +71,10 @@ apt_repository 'ffmpeg' do
   action :remove
 end
                              
-
-
-
 home="/home/#{node['cvat']['user']}"
 
-git home do
+cvat="#{home}/cvat"
+git cvat do
    repository 'https://github.com/opencv/cvat.git'
    revision "v" + node['cvat']['version']
    action :sync
@@ -87,28 +82,12 @@ git home do
    group node['cvat']['group']
 end
 
-
 execute 'copy_components' do
   user node['cvat']['user']
-  command "cp -r #{home}/components /tmp"
+  command "cp -r #{cvat}/components /tmp"
   action :run
 end
 
-
-git home do
-   repository 'https://github.com/opencv/cvat.git'
-   revision "v" + node['cvat']['version']
-   action :sync
-   user node['cvat']['user']
-   group node['cvat']['group']
-end
-
-
-execute 'copy_components' do
-  user node['cvat']['user']
-  command "cp -r #{home}/components /tmp"
-  action :run
-end
 
 execute 'run_openvino' do
   user node['cvat']['user']
@@ -131,36 +110,36 @@ execute 'run_tf_annotation' do
   command "bash -i /tmp/components/tf_annotation/install.sh"
   action :run
   only_if node['cvat']['tf_annotation'] == "true"
-  environment ({'TF_ANNOTATION' => 'yes', 'TF_ANNOTATION_MODEL_PATH'=${home}/rcnn/inference_graph})  
+  environment ({'TF_ANNOTATION' => 'yes', 'TF_ANNOTATION_MODEL_PATH'=>"#{home}/rcnn/inference_graph"})  
 end
 
 execute 'copy_requirements' do
   user node['cvat']['user']
-  command "cp -r cvat/requirements/ /tmp/requirements/"
+  command "cp -r #{cvat}/requirements/ /tmp/requirements/"
   action :run
 end
 
 execute 'copy_supervisord' do
   user node['cvat']['user']
-  command "cp supervisord.conf #{home}"
+  command "cp #{cvat}/supervisord.conf #{home}"
   action :run
 end
 
 execute 'copy_wsgi' do
   user node['cvat']['user']
-  command "cp mod_wsgi.conf #{home}"
+  command "cp #{cvat}/mod_wsgi.conf #{home}"
   action :run
 end
 
 execute 'copy_wait_for_it' do
   user node['cvat']['user']
-  command "cp wait-for-it.sh #{home}"
+  command "cp #{cvat}/wait-for-it.sh #{home}"
   action :run
 end
 
 execute 'copy_wait_for_it' do
   user node['cvat']['user']
-  command "cp manage.py #{home}"
+  command "cp #{cvat}/manage.py #{home}"
   action :run
 end
 

@@ -19,6 +19,8 @@ group hops_group do
 end
 
 home="/home/#{node['cvat']['user']}"
+cvat="/home/#{node['cvat']['user']}/cvat"
+
 DJANGO_CONFIGURATION=node['cvat']['django_config']
 
 bash "django_pip_install" do
@@ -45,7 +47,6 @@ bash "django_apt_update" do
     else 
         echo export "GIT_SSH_COMMAND=\"ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 -o ProxyCommand='nc -X 5 -x ${socks_proxy} %h %p'\"" >> ${HOME}/.bashrc;
     fi
-
     EOF
 end
 
@@ -62,23 +63,23 @@ bash "openvino_update" do
 end    
 
 
-execute 'copy_ssh' do
-  user node['cvat']['user']
-  command "cp -r ssh #{home}/.ssh"
-  action :run
-end
+# execute 'copy_ssh' do
+#   user node['cvat']['user']
+#   command "cp -r ssh #{home}/.ssh"
+#   action :run
+# end
 
-execute 'copy_cvat' do
-  user node['cvat']['user']
-  command "cp -r cvat #{home}/cvat"
-  action :run
-end
+# execute 'copy_cvat' do
+#   user node['cvat']['user']
+#   command "cp -r cvat #{home}/cvat"
+#   action :run
+# end
 
-execute 'copy_tests' do
-  user node['cvat']['user']
-  command "cp -r tests #{home}/tests"
-  action :run
-end
+# execute 'copy_tests' do
+#   user node['cvat']['user']
+#   command "cp -r tests #{home}/tests"
+#   action :run
+# end
 
 execute 'patch' do
   user node['cvat']['user']
@@ -87,11 +88,11 @@ execute 'patch' do
 end
 
 
-execute 'patch' do
-  user node['cvat']['user']  
-  command "chown -R ${USER}:${USER} ."
-  action :run
-end
+# execute 'patch' do
+#   user node['cvat']['user']  
+#   command "chown -R ${USER}:${USER} ."
+#   action :run
+# end
 
 execute 'chown' do
   user 'root'
@@ -100,23 +101,18 @@ execute 'chown' do
 end
 
 
-execute 'chown' do
+execute 'mkdir_supervisord' do
   user node['cvat']['user']  
   command "mkdir data share media keys logs /tmp/supervisord"
   action :run
 end
 
 
-execute 'chown' do
+execute 'collectstatic' do
   user node['cvat']['user']  
   command "python3 manage.py collectstatic"
   action :run
 end
 
-execute 'chown' do
-  user node['cvat']['user']  
-  command "python3 manage.py collectstatic"
-  action :run
-end
 #EXPOSE 8080 8443
 #ENTRYPOINT ["/usr/bin/supervisord"]
