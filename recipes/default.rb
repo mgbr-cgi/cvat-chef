@@ -23,30 +23,33 @@ cvat="/home/#{node['cvat']['user']}/cvat"
 
 DJANGO_CONFIGURATION=node['cvat']['django_config']
 
-bash "django_pip_install" do
-    user node['cvat']['user']
-    group node['cvat']['group']
-    code <<-EOF
-      pip3 install --no-cache-dir -r /tmp/requirements/#{DJANGO_CONFIGURATION}.txt             
-    EOF
+
+
+bash "create_cvat_env" do
+  user node['conda']['user']
+  group node['conda']['group']
+  cwd "/home/#{node['conda']['user']}"
+  code <<-EOF
+       #{node['conda']['base_dir']}/bin/conda env create --name cvat -q -y python=3.6
+       #{node['conda']['base_dir']}/envs/cvat/bin/pip3 install --no-cache-dir -r /tmp/requirements/#{DJANGO_CONFIGURATION}.txt             
+  EOF
+  not_if "test -d #{node['conda']['base_dir']}/envs/cvat", :user => node['conda']['user']
 end
-
-
 
 bash "django_apt_update" do
     user 'root'
     code <<-EOF
-     apt-get update
+    apt-get update
     apt-get install -y ssh netcat-openbsd curl zip 
     wget -qO /dev/stdout https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
     apt-get install -y git-lfs
     git lfs install
     rm -rf /var/lib/apt/lists/*
-    if [ -z ${socks_proxy} ]; then 
-        echo export "GIT_SSH_COMMAND=\"ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30\"" >> ${HOME}/.bashrc; 
-    else 
-        echo export "GIT_SSH_COMMAND=\"ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 -o ProxyCommand='nc -X 5 -x ${socks_proxy} %h %p'\"" >> ${HOME}/.bashrc;
-    fi
+    # if [ -z ${socks_proxy} ]; then 
+    #     echo export "GIT_SSH_COMMAND=\"ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30\"" >> ${HOME}/.bashrc; 
+    # else 
+    #     echo export "GIT_SSH_COMMAND=\"ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 -o ProxyCommand='nc -X 5 -x ${socks_proxy} %h %p'\"" >> ${HOME}/.bashrc;
+    # fi
     EOF
 end
 
@@ -69,17 +72,18 @@ end
 #   action :run
 # end
 
-# execute 'copy_cvat' do
-#   user node['cvat']['user']
-#   command "cp -r cvat #{home}/cvat"
-#   action :run
-# end
+execute 'copy_cvat' do
+  user node['cvat']['user']
+  command "cp -r cvat #{home}/cvat"
+  action :run
+end
 
-# execute 'copy_tests' do
-#   user node['cvat']['user']
-#   command "cp -r tests #{home}/tests"
-#   action :run
-# end
+
+execute 'copy_tests' do
+  user node['cvat']['user']
+  command "cp -r tests #{home}/tests"
+  action :run
+end
 
 execute 'patch' do
   user node['cvat']['user']

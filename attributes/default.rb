@@ -14,4 +14,4 @@ default['cvat']['base_dir']                     = "#{node['cvat']['dir']}/cvat"
 default['cvat']['openvino']                     = "false"
 default['cvat']['cuda']                         = "false"
 
-default['cvat']['django_config']                = "production" # base, development, staging
+default['cvat']['django_config']                = "development" # base, development, staging
