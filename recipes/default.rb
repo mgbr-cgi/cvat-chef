@@ -109,7 +109,7 @@ execute 'mkdir_supervisord' do
   cwd "/home/#{node['cvat']['user']}/cvat"  
   command "mkdir -p data share media keys logs /tmp/supervisord"
   action :run
-  not_if { ::Dir.exists("/tmp/supervisord") }
+  not_if { File.directory?("/tmp/supervisord") }
 end
 
 
