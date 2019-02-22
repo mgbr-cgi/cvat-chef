@@ -30,8 +30,8 @@ bash "create_cvat_env" do
   group node['conda']['group']
   cwd "/home/#{node['conda']['user']}"
   code <<-EOF
-       #{node['conda']['base_dir']}/bin/conda env create --name cvat -q -y python=3.6
-       #{node['conda']['base_dir']}/envs/cvat/bin/pip3 install --no-cache-dir -r /tmp/requirements/#{DJANGO_CONFIGURATION}.txt             
+       #{node['conda']['base_dir']}/bin/conda create -n cvat -q python=3.6 -y
+       #{node['conda']['base_dir']}/envs/cvat/bin/pip install --no-cache-dir -r /tmp/requirements/#{DJANGO_CONFIGURATION}.txt             
   EOF
   not_if "test -d #{node['conda']['base_dir']}/envs/cvat", :user => node['conda']['user']
 end
@@ -62,7 +62,7 @@ bash "openvino_update" do
         wget https://download.01.org/openvinotoolkit/2018_R5/open_model_zoo/person-reidentification-retail-0079/FP32/person-reidentification-retail-0079.xml -O reid/reid.xml
         wget https://download.01.org/openvinotoolkit/2018_R5/open_model_zoo/person-reidentification-retail-0079/FP32/person-reidentification-retail-0079.bin -O reid/reid.bin
   EOF
-  only_if node['cvat']['openvino'] == "true"
+  only_if { "#{node['cvat']['openvino']}" == "true" }
 end    
 
 
@@ -72,49 +72,49 @@ end
 #   action :run
 # end
 
-execute 'copy_cvat' do
-  user node['cvat']['user']
-  command "cp -r cvat #{home}/cvat"
-  action :run
-end
-
-
-execute 'copy_tests' do
-  user node['cvat']['user']
-  command "cp -r tests #{home}/tests"
-  action :run
-end
-
-execute 'patch' do
-  user node['cvat']['user']
-  command "RUN patch -p1 < ${HOME}/cvat/apps/engine/static/engine/js/3rdparty.patch"
-  action :run
-end
-
-
-# execute 'patch' do
-#   user node['cvat']['user']  
-#   command "chown -R ${USER}:${USER} ."
+# execute 'copy_cvat' do
+#   user node['cvat']['user']
+#   cwd "/tmp"
+#   command "cp -r cvat #{home}/cvat"
 #   action :run
 # end
 
+
+# execute 'copy_tests' do
+#   user node['cvat']['user']
+#   cwd "/tmp"
+#   command "cp -r tests #{home}/tests"
+#   action :run
+# end
+
+execute 'patch' do
+  user node['cvat']['user']
+  cwd "/home/#{node['cvat']['user']}/cvat"
+  command "patch -p1 < cvat/apps/engine/static/engine/js/3rdparty.patch"
+  action :run
+end
+
+
 execute 'chown' do
   user 'root'
-  command "chown -R #{node['cvat']['user']}:#{node['cvat']['group']} ."
+  cwd "/home/#{node['cvat']['user']}"  
+  command "chown -R #{node['cvat']['user']}:#{node['cvat']['group']} cvat"
   action :run
 end
 
 
 execute 'mkdir_supervisord' do
-  user node['cvat']['user']  
+  user node['cvat']['user']
+  cwd "/home/#{node['cvat']['user']}/cvat"  
   command "mkdir data share media keys logs /tmp/supervisord"
   action :run
 end
 
 
 execute 'collectstatic' do
-  user node['cvat']['user']  
-  command "python3 manage.py collectstatic"
+  user node['cvat']['user']
+  cwd "/home/#{node['cvat']['user']}/cvat"  
+  command "#{node['conda']['base_dir']}/envs/cvat/bin/python manage.py collectstatic"
   action :run
 end
 
