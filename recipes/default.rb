@@ -114,7 +114,7 @@ end
 
 
 execute 'collectstatic' do
-  user node['cvat']['user']
+  user node['conda']['user']
   cwd "/home/#{node['cvat']['user']}/cvat"  
   command "#{node['conda']['dir']}/envs/cvat/bin/python manage.py collectstatic"
   action :run
