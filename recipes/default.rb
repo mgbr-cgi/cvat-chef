@@ -91,6 +91,7 @@ execute 'patch' do
   user node['cvat']['user']
   cwd "/home/#{node['cvat']['user']}/cvat"
   command "patch -p1 < cvat/apps/engine/static/engine/js/3rdparty.patch"
+  ignore_failure true
   action :run
 end
 
