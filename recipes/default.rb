@@ -30,10 +30,10 @@ bash "create_cvat_env" do
   group node['conda']['group']
   cwd "/home/#{node['conda']['user']}"
   code <<-EOF
-       #{node['conda']['base_dir']}/bin/conda create -n cvat -q python=3.6 -y
-       #{node['conda']['base_dir']}/envs/cvat/bin/pip install --no-cache-dir -r /tmp/requirements/#{DJANGO_CONFIGURATION}.txt             
+       #{node['conda']['base_dir']}/bin/conda create python=3.6 -y -n cvat
+       #{node['conda']['dir']}/envs/cvat/bin/pip install --no-cache-dir -r /tmp/requirements/#{DJANGO_CONFIGURATION}.txt             
   EOF
-  not_if "test -d #{node['conda']['base_dir']}/envs/cvat", :user => node['conda']['user']
+  not_if "test -d #{node['conda']['dir']}/envs/cvat", :user => node['conda']['user']
 end
 
 bash "django_apt_update" do
@@ -107,15 +107,16 @@ end
 execute 'mkdir_supervisord' do
   user node['cvat']['user']
   cwd "/home/#{node['cvat']['user']}/cvat"  
-  command "mkdir data share media keys logs /tmp/supervisord"
+  command "mkdir -p data share media keys logs /tmp/supervisord"
   action :run
+  not_if { ::Dir.exists("/tmp/supervisord") }
 end
 
 
 execute 'collectstatic' do
   user node['cvat']['user']
   cwd "/home/#{node['cvat']['user']}/cvat"  
-  command "#{node['conda']['base_dir']}/envs/cvat/bin/python manage.py collectstatic"
+  command "#{node['conda']['dir']}/envs/cvat/bin/python manage.py collectstatic"
   action :run
 end
 
