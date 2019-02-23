@@ -12,6 +12,8 @@ default['cvat']['dir']                          = node['install']['dir'].empty? 
 default['cvat']['home']                         = "#{node['cvat']['dir']}/cvat-#{node['cvat']['python']}-#{node['cvat']['version']}"
 default['cvat']['base_dir']                     = "#{node['cvat']['dir']}/cvat"
 
+default['cvat']['pid_file']                     = "#{node['cvat']['dir']}/cvat/cvat.pid"
+
 default['cvat']['openvino']                     = "false"
 default['cvat']['cuda']                         = "false"
 

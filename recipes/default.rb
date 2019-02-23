@@ -140,5 +140,60 @@ execute 'collectstatic' do
   action :run
 end
 
+
+execute 'runserver' do
+  user node['cvat']['user']
+  cwd "/home/#{node['cvat']['user']}/cvat"  
+  command "#{node['conda']['dir']}/envs/cvat/bin/python manage.py runserver 0.0.0.0:8000"
+  action :run
+end
+
 #EXPOSE 8080 8443
 #ENTRYPOINT ["/usr/bin/supervisord"]
+
+
+
+service_name = "cvat"
+
+service service_name do
+  provider Chef::Provider::Service::Systemd
+  supports :restart => true, :stop => true, :start => true, :status => true
+  action :nothing
+end
+
+case node['platform_family']
+when "rhel"
+  systemd_script = "/usr/lib/systemd/system/#{service_name}.service"
+else
+  systemd_script = "/lib/systemd/system/#{service_name}.service"
+end
+
+file systemd_script do
+  action :delete
+  ignore_failure true
+end
+
+template systemd_script do
+  source "#{service_name}.service.erb"
+  owner "root"
+  group "root"
+  mode 0664
+  if node['services']['enabled'] == "true"
+    notifies :enable, resources(:service => "#{service_name}")
+  end
+  notifies :restart, resources(:service => service_name)
+end
+
+kagent_config "#{service_name}" do
+  action :systemd_reload
+  not_if "systemctl status #{service_name}"
+end
+
+
+if node['kagent']['enabled'] == "true"
+  kagent_config service_name do
+    service "cvat"
+    log_file "#{node['cvat']['base_dir']}/logs/cvat_server.log"
+    web_port 8000
+  end
+end

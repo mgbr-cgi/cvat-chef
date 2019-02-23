@@ -1,0 +1,19 @@
+[Unit]
+Description = OpenCV cvat Django server
+After = syslog.target network.target remote-fs.target
+
+[Service]
+User = <%= node['cvat']['user'] %>
+Restart=always
+RestartSec=5
+PIDFile = <%= node['cvat']['pid_file'] %>
+# Prefixing a command with '-' means that you should still continue, even if it fails.
+ExecStartPre=-/bin/chown <%= node['cvat']['user'] %> <%= node['cvat']['pid_file'] %>
+ExecStart = <%= "#{#{node['conda']['dir']}/envs/cvat/bin/python /home/#{node['cvat']['user']}/cvat/manage.py runserver 0.0.0.0:8000" %>
+ExecStop = pid=$(netstat -ltpn | grep 8000 | awk '{print $7}' | sed -e 's/\/java//g') && kill $pid
+
+
+#Type = forking
+
+[Install]
+WantedBy = multi-user.target
