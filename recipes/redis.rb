@@ -20,7 +20,7 @@ bash "install_redis" do
       chown -R #{node['cvat']['user']}:#{node['cvat']['group']} #{node['install']['dir']}/redis
       ln -s #{node['install']['dir']}/redis /var/lib/redis
   EOF
-  not_if { "systemctl status redis" }
+  'not_if "systemctl status redis"'
 end
 
 template "/etc/redis/redis.conf" do

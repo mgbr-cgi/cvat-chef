@@ -10,7 +10,7 @@ PIDFile = <%= node['cvat']['pid_file'] %>
 # Prefixing a command with '-' means that you should still continue, even if it fails.
 ExecStartPre=-/bin/chown <%= node['cvat']['user'] %> <%= node['cvat']['pid_file'] %>
 ExecStart = <%= "#{#{node['conda']['dir']}/envs/cvat/bin/python /home/#{node['cvat']['user']}/cvat/manage.py runserver 0.0.0.0:8000" %>
-ExecStop = /home/<%= "#{#{node['cvat']['user']}/cvat-stop.sh
+ExecStop = /home/<%= node['cvat']['user'] %>/cvat-stop.sh
 Type = simple
 
 [Install]
