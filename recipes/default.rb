@@ -139,17 +139,6 @@ execute 'collectstatic' do
 end
 
 
-execute 'runserver' do
-  user node['cvat']['user']
-  cwd "/home/#{node['cvat']['user']}/cvat"  
-  command "#{node['conda']['dir']}/envs/cvat/bin/python manage.py runserver 0.0.0.0:8000"
-  action :run
-end
-
-#EXPOSE 8080 8443
-#ENTRYPOINT ["/usr/bin/supervisord"]
-
-
 template "/home/#{node['cvat']['user']}/cvat-stop.sh" do
   source 'cvat-stop.sh.erb'
   owner node['cvat']['user']
