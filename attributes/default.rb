@@ -1,4 +1,5 @@
 ############################ BEGIN GLOBAL ATTRIBUTES #######################################
+include_attribute "conda"
 include_attribute "kagent"
 
 default['cvat']['version']                      = "0.3.0"
