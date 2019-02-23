@@ -17,6 +17,8 @@ depends            'kagent'
 
 recipe "cvat::install", "Installs  cvat"
 recipe "cvat::default", "Configures cvat"
+recipe "cvat::redis", "Installs and configures redis (for cvat)"
+
 
 ################################ Begin installation wide attributes ########################################
 

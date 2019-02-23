@@ -24,8 +24,6 @@ group node['conda']['group'] do
   append true
 end
 
-
-
 home="/home/#{node['cvat']['user']}"
 cvat="/home/#{node['cvat']['user']}/cvat"
 
@@ -151,8 +149,6 @@ end
 #EXPOSE 8080 8443
 #ENTRYPOINT ["/usr/bin/supervisord"]
 
-
-
 service_name = "cvat"
 
 service service_name do
@@ -197,3 +193,7 @@ if node['kagent']['enabled'] == "true"
     web_port 8000
   end
 end
+
+
+include_recipe "cvat::redis"
+

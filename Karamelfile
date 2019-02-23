@@ -5,3 +5,6 @@ dependencies:
   - recipe: cvat::default
     global:  
       - hops::dn
+  - recipe: cvat::redis
+    global:  
+      - cvat::default
