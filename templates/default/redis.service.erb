@@ -8,7 +8,7 @@ Group=<%= node['cvat']['group']%>
 ExecStart=/usr/local/bin/redis-server /etc/redis/redis.conf
 ExecStop=/usr/local/bin/redis-cli shutdown
 Restart=always
-Type = simple
+Type = notify
 
 [Install]
 WantedBy=multi-user.target

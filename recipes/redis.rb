@@ -24,9 +24,9 @@ bash "install_redis" do
 end
 
 template "/etc/redis/redis.conf" do
-  source 'redis.erb'
+  source 'redis.conf.erb'
   owner "root"
-  group "root
+  group "root"
   mode 0755
 end
 
