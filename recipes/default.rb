@@ -32,16 +32,28 @@ cvat="/home/#{node['cvat']['user']}/cvat"
 DJANGO_CONFIGURATION=node['cvat']['django_config']
 
 
-
 bash "create_cvat_env" do
   user node['conda']['user']
+  group node['conda']['group']
   umask "022"
+  environment ({'HOME' => "/home/#{node['conda']['user']}"})
   cwd "/home/#{node['conda']['user']}"
   code <<-EOF
-       #{node['conda']['base_dir']}/bin/conda create python=3.6 -n cvat -y
-       #{node['conda']['dir']}/envs/cvat/bin/pip install -r /tmp/requirements/#{DJANGO_CONFIGURATION}.txt             
+    #{node['conda']['base_dir']}/bin/conda create python=3.6 -n cvat
   EOF
   not_if "test -d #{node['conda']['dir']}/envs/cvat", :user => node['conda']['user']
+end
+
+
+bash "pip_cvat_env" do
+  user node['conda']['user']
+  group node['conda']['group']
+  umask "022"
+  environment ({'HOME' => "/home/#{node['conda']['user']}"})
+  cwd "/home/#{node['conda']['user']}"
+  code <<-EOF
+       #{node['conda']['dir']}/envs/cvat/bin/pip install -r /tmp/requirements/#{DJANGO_CONFIGURATION}.txt             
+  EOF
 end
 
 bash "django_apt_update" do
