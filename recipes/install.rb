@@ -144,3 +144,8 @@ execute 'copy_wait_for_it' do
 end
 
 
+template "/home/#{node['cvat']['user']}/environment.yml" do
+  source "environment.yml.erb"
+  owner node['cvat']['user']
+  mode 0655
+end

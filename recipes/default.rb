@@ -34,12 +34,15 @@ DJANGO_CONFIGURATION=node['cvat']['django_config']
 
 
 bash "create_cvat_env" do
-  user node['conda']['user']
-  group node['conda']['group']
-  cwd "/home/#{node['conda']['user']}"
+  user 'root'
+  group 'root'
+  umask "022"
+  cwd "/home/#{node['cvat']['user']}"
   code <<-EOF
-       #{node['conda']['base_dir']}/bin/conda create python=3.6 -n cvat -y
-       #{node['conda']['dir']}/envs/cvat/bin/pip install --no-cache-dir -r /tmp/requirements/#{DJANGO_CONFIGURATION}.txt             
+#       #{node['conda']['base_dir']}/bin/conda create python=3.6 -n cvat -y
+#       #{node['conda']['dir']}/envs/cvat/bin/pip install --no-cache-dir -r /tmp/requirements/#{DJANGO_CONFIGURATION}.txt             
+    su #{node['conda']['user']} -c "HADOOP_HOME=#{node['install']['dir']}/hadoop \
+       #{node['conda']['base_dir']}/bin/conda env create -q --file /home/#{node['cvat']['user']}/environment.yml"
   EOF
   not_if "test -d #{node['conda']['dir']}/envs/cvat", :user => node['conda']['user']
 end

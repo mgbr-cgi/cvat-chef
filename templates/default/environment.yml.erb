@@ -1,0 +1,8 @@
+name: cvat
+dependencies:
+- python==3.6
+- anaconda
+- pip
+- pip:
+  - /tmp/requirements/<%= node['cvat']['django_config'] %>
+  
