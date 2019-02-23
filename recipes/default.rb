@@ -149,6 +149,14 @@ end
 #EXPOSE 8080 8443
 #ENTRYPOINT ["/usr/bin/supervisord"]
 
+
+template "/home/#{node['cvat']['user']}/cvat-stop.sh" do
+  source 'cvat-stop.sh.erb'
+  owner node['cvat']['user']
+  group node['cvat']['group']
+  mode 0755
+end
+
 service_name = "cvat"
 
 service service_name do
@@ -196,4 +204,3 @@ end
 
 
 include_recipe "cvat::redis"
-

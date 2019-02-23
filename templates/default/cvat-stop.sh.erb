@@ -1,0 +1,4 @@
+#!/bin/bash
+pid=$(netstat -ltpn | grep 8000 | awk '{print $7}' | sed -e 's/\/java//g')
+kill $pid
+

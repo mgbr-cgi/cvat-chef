@@ -12,7 +12,6 @@ bash "install_redis" do
       sudo apt install build-essential tcl
       curl -O http://download.redis.io/redis-stable.tar.gz
       tar zxf redis-stable.tar.gz
-#      chown -R #{node['cvat']['user']}:#{node['cvat']['group']} redis-stable
       cd redis-stable
       make install
       mkdir /etc/redis
@@ -23,6 +22,14 @@ bash "install_redis" do
   EOF
   not_if { "systemctl status redis" }
 end
+
+template "/etc/redis/redis.conf" do
+  source 'redis.erb'
+  owner "root"
+  group "root
+  mode 0755
+end
+
 
 service_name = "redis"
 
