@@ -51,8 +51,22 @@ bash "pip_cvat_env" do
   cwd "/home/#{node['conda']['user']}"
   code <<-EOF
        #{node['conda']['dir']}/envs/cvat/bin/pip install -r /tmp/requirements/#{DJANGO_CONFIGURATION}.txt             
+       export HADOOP_HOME=#{node['hops']['base_dir']}
+       #{node['conda']['dir']}/envs/cvat/bin/pip install pydoop==#{node['pydoop']['version']}"
   EOF
 end
+
+  bash "pydoop_py#{python}_env" do
+    user "root"
+    umask "022"
+    code <<-EOF
+    set -e
+    export CONDA_DIR=#{node['conda']['base_dir']}
+    export PROJECT=#{proj}
+    su #{node['conda']['user']} -c "export HADOOP_HOME=#{node['install']['dir']}/hadoop; yes | ${CONDA_DIR}/envs/${PROJECT}/bin/pip install pydoop==#{node['pydoop']['version']}"
+    EOF
+  end
+
 
 bash "django_apt_update" do
     user 'root'
