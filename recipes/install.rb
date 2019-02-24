@@ -75,7 +75,7 @@ home="/home/#{node['cvat']['user']}"
 
 cvat="#{home}/cvat"
 git cvat do
-   repository 'https://github.com/opencv/cvat.git'
+   repository 'https://github.com/logicalclocks/cvat.git'
    revision "v" + node['cvat']['version']
    action :sync
    user node['cvat']['user']
