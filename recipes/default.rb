@@ -62,8 +62,7 @@ end
     code <<-EOF
     set -e
     export CONDA_DIR=#{node['conda']['base_dir']}
-    export PROJECT=#{proj}
-    su #{node['conda']['user']} -c "export HADOOP_HOME=#{node['install']['dir']}/hadoop; yes | ${CONDA_DIR}/envs/${PROJECT}/bin/pip install pydoop==#{node['pydoop']['version']}"
+    su #{node['conda']['user']} -c "export HADOOP_HOME=#{node['install']['dir']}/hadoop; yes | ${CONDA_DIR}/envs/cvat/bin/pip install pydoop==#{node['pydoop']['version']}"
     EOF
   end
 
