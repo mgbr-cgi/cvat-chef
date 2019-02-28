@@ -56,7 +56,7 @@ bash "pip_cvat_env" do
   EOF
 end
 
-  bash "pydoop_py#{python}_env" do
+  bash "pydoop_install" do
     user "root"
     umask "022"
     code <<-EOF
@@ -152,6 +152,19 @@ execute 'collectstatic' do
   action :run
 end
 
+execute 'migrate' do
+  user node['cvat']['user']
+  cwd "/home/#{node['cvat']['user']}/cvat"  
+  command "#{node['conda']['dir']}/envs/cvat/bin/python manage.py migrate"
+  action :run
+end
+
+# execute 'createsuperuser' do
+#   user node['cvat']['user']
+#   cwd "/home/#{node['cvat']['user']}/cvat"  
+#   command "#{node['conda']['dir']}/envs/cvat/bin/python manage.py createsuperuser --username cvat --email hopsworks@gmail.com --noinput" 
+#   action :run
+# end
 
 template "/home/#{node['cvat']['user']}/cvat-stop.sh" do
   source 'cvat-stop.sh.erb'
