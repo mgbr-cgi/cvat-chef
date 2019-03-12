@@ -1,7 +1,7 @@
 source "https://supermarket.chef.io"
 
-#cookbook 'magic_shell'
-#cookbook 'java'
+cookbook 'java'
 metadata
 
 cookbook 'kagent', github: "logicalclocks/kagent-chef", branch: "master"
+cookbook 'hops', github: "logicalclocks/hops-hadoop-chef", branch: "master"

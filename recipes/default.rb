@@ -37,34 +37,23 @@ bash "create_cvat_env" do
   environment ({'HOME' => "/home/#{node['conda']['user']}"})
   cwd "/home/#{node['conda']['user']}"
   code <<-EOF
-    #{node['conda']['base_dir']}/bin/conda create python=3.6 -n cvat
+    set -e
+    #{node['conda']['base_dir']}/bin/conda create -n cvat python==3.6
+    #{node['conda']['dir']}/envs/cvat/bin/pip install -r /tmp/requirements/#{DJANGO_CONFIGURATION}.txt
   EOF
   not_if "test -d #{node['conda']['dir']}/envs/cvat", :user => node['conda']['user']
 end
 
 
-bash "pip_cvat_env" do
-  user node['conda']['user']
-  group node['conda']['group']
+bash "pydoop_install" do
+  user "root"
   umask "022"
-  environment ({'HOME' => "/home/#{node['conda']['user']}"})
-  cwd "/home/#{node['conda']['user']}"
   code <<-EOF
-       #{node['conda']['dir']}/envs/cvat/bin/pip install -r /tmp/requirements/#{DJANGO_CONFIGURATION}.txt             
-       export HADOOP_HOME=#{node['hops']['base_dir']}
-       #{node['conda']['dir']}/envs/cvat/bin/pip install pydoop==#{node['pydoop']['version']}"
-  EOF
-end
-
-  bash "pydoop_install" do
-    user "root"
-    umask "022"
-    code <<-EOF
     set -e
     export CONDA_DIR=#{node['conda']['base_dir']}
-    su #{node['conda']['user']} -c "export HADOOP_HOME=#{node['install']['dir']}/hadoop; yes | ${CONDA_DIR}/envs/cvat/bin/pip install pydoop==#{node['pydoop']['version']}"
+    su #{node['conda']['user']} -c "export HADOOP_HOME=#{node['hops']['base_dir']}; yes | ${CONDA_DIR}/envs/cvat/bin/pip install pydoop==#{node['pydoop']['version']}"
     EOF
-  end
+end
 
 
 bash "django_apt_update" do

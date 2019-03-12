@@ -1,6 +1,7 @@
 ############################ BEGIN GLOBAL ATTRIBUTES #######################################
 include_attribute "conda"
 include_attribute "kagent"
+include_attribute "hops"
 
 default['cvat']['version']                      = "0.3.0"
 
