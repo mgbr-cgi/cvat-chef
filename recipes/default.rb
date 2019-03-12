@@ -39,19 +39,19 @@ bash "create_cvat_env" do
   code <<-EOF
     set -e
     #{node['conda']['base_dir']}/bin/conda create -n cvat python==3.6
-    #{node['conda']['dir']}/envs/cvat/bin/pip install -r /tmp/requirements/#{DJANGO_CONFIGURATION}.txt
   EOF
   not_if "test -d #{node['conda']['dir']}/envs/cvat", :user => node['conda']['user']
 end
 
 
-bash "pydoop_install" do
+bash "python_reqs_install" do
   user "root"
   umask "022"
   code <<-EOF
     set -e
     export CONDA_DIR=#{node['conda']['base_dir']}
     su #{node['conda']['user']} -c "export HADOOP_HOME=#{node['hops']['base_dir']}; yes | ${CONDA_DIR}/envs/cvat/bin/pip install pydoop==#{node['pydoop']['version']}"
+    su #{node['conda']['user']} -c "yes | #{node['conda']['dir']}/envs/cvat/bin/pip install -r /tmp/requirements/#{DJANGO_CONFIGURATION}.txt"
     EOF
 end
 
