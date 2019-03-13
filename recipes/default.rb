@@ -30,6 +30,14 @@ cvat="/home/#{node['cvat']['user']}/cvat"
 DJANGO_CONFIGURATION=node['cvat']['django_config']
 
 
+template "/home/#{node['cvat']['user']}/create-superuser.sh" do
+  source 'create-superuser.sh.erb'
+  owner node['cvat']['user']
+  group node['cvat']['group']
+  mode 0750
+end
+
+
 bash "create_cvat_env" do
   user node['conda']['user']
   group node['conda']['group']
@@ -61,10 +69,10 @@ bash "django_apt_update" do
     code <<-EOF
     apt-get update
     apt-get install -y ssh netcat-openbsd curl zip 
-    wget -qO /dev/stdout https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
-    apt-get install -y git-lfs
-    git lfs install
-    rm -rf /var/lib/apt/lists/*
+#    wget -qO /dev/stdout https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
+#    apt-get install -y git-lfs
+#    git lfs install
+#    rm -rf /var/lib/apt/lists/*
     # if [ -z ${socks_proxy} ]; then 
     #     echo export "GIT_SSH_COMMAND=\"ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30\"" >> ${HOME}/.bashrc; 
     # else 
@@ -153,6 +161,14 @@ end
 #   command "#{node['conda']['dir']}/envs/cvat/bin/python manage.py createsuperuser --username cvat --email hopsworks@gmail.com --noinput" 
 #   action :run
 # end
+
+
+execute 'createsuperuser' do
+  user node['cvat']['user']
+  cwd "/home/#{node['cvat']['user']}"  
+  command "./create-superuser.sh"
+  action :run
+end
 
 template "/home/#{node['cvat']['user']}/cvat-stop.sh" do
   source 'cvat-stop.sh.erb'

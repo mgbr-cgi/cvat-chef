@@ -44,5 +44,10 @@ attribute "cvat/django_config",
           :description => "default: 'production'. Options: 'development', 'base', 'staging'",
           :type => 'string'
 
+attribute "cvat/admin_user",
+          :description => "Admin username for cvat",
+          :type => 'string'
 
-
+attribute "cvat/admin_password",
+          :description => "Admin username for cvat",
+          :type => 'string'

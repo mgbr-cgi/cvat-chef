@@ -19,3 +19,7 @@ default['cvat']['openvino']                     = "false"
 default['cvat']['cuda']                         = "false"
 
 default['cvat']['django_config']                = "development" # base, development, staging
+
+default['cvat']['admin_user']                   = "admin"
+
+default['cvat']['admin_password']               = "cvat2019"
