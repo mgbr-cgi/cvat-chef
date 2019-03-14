@@ -6,6 +6,8 @@ After = syslog.target network.target remote-fs.target
 User = <%= node['cvat']['user'] %>
 Restart=always
 RestartSec=5
+Environment=HADOOP_HOME=<%= node['hops']['base_dir']%>
+Environment=HADOOP_CONF_DIR=<%= node['hops']['conf_dir']%>
 PIDFile = <%= node['cvat']['pid_file'] %>
 # Prefixing a command with '-' means that you should still continue, even if it fails.
 ExecStartPre=-/bin/chown <%= node['cvat']['user'] %> <%= node['cvat']['pid_file'] %>
