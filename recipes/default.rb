@@ -165,8 +165,8 @@ end
 
 execute 'createsuperuser' do
   user node['cvat']['user']
-  cwd "/home/#{node['cvat']['user']}"  
-  command "./create-superuser.sh"
+  cwd "/home/#{node['cvat']['user']}"    
+  command "/home/#{node['cvat']['user']}/create-superuser.sh"
   action :run
 end
 

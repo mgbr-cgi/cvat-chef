@@ -59,6 +59,7 @@ package "unzip"
 package "unrar"
 package "p7zip-full"
 package "git"
+package "expect"
 
 
 apt_repository 'xerus-media' do

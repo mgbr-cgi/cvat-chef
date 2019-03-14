@@ -1,7 +1,7 @@
 #!/usr/bin/expect
 
-spawn "<%= node['conda']['dir'] %>/envs/cvat/bin/python /home/<%= node['cvat']['user']%>/cvat/manage.py createsuperuser --username <%= node['cvat']['admin_user']%> --email hopsworks@gmail.com "
-expect 'Password:]'
-send "<%= node['cvat']['admin_password'] %>\r"
-expect 'Password (again):]'
-send "<%= node['cvat']['admin_password'] %>\r"
+spawn <%= node['conda']['dir'] %>/envs/cvat/bin/python /home/<%= node['cvat']['user']%>/cvat/manage.py createsuperuser --username <%= node['cvat']['admin_user']%> --email hopsworks@gmail.com
+expect "Password: "
+send "<%= node['cvat']['admin_password'] %>\r";
+expect "Password (again): "
+send "<%= node['cvat']['admin_password'] %>\r";
