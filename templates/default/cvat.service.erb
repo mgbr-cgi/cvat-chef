@@ -9,6 +9,7 @@ RestartSec=5
 Environment=HADOOP_HOME=<%= node['hops']['base_dir']%>
 Environment=HADOOP_CONF_DIR=<%= node['hops']['conf_dir']%>
 Environment=HADOOP_USER_NAME=<%= node['hops']['hdfs']['user']%>
+Environment=PROJECT=demo_deep_learning_admin000
 PIDFile = <%= node['cvat']['pid_file'] %>
 # Prefixing a command with '-' means that you should still continue, even if it fails.
 ExecStartPre=-/bin/chown <%= node['cvat']['user'] %> <%= node['cvat']['pid_file'] %>

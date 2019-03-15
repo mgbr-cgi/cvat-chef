@@ -155,14 +155,6 @@ execute 'migrate' do
   action :run
 end
 
-# execute 'createsuperuser' do
-#   user node['cvat']['user']
-#   cwd "/home/#{node['cvat']['user']}/cvat"  
-#   command "#{node['conda']['dir']}/envs/cvat/bin/python manage.py createsuperuser --username cvat --email hopsworks@gmail.com --noinput" 
-#   action :run
-# end
-
-
 execute 'createsuperuser' do
   user node['cvat']['user']
   cwd "/home/#{node['cvat']['user']}"    
