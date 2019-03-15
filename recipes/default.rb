@@ -60,7 +60,6 @@ bash "python_reqs_install" do
     export CONDA_DIR=#{node['conda']['base_dir']}
     su #{node['conda']['user']} -c "export HADOOP_HOME=#{node['hops']['base_dir']}; yes | ${CONDA_DIR}/envs/cvat/bin/pip install pydoop==#{node['pydoop']['version']}"
     su #{node['conda']['user']} -c "yes | #{node['conda']['dir']}/envs/cvat/bin/pip install -r /tmp/requirements/#{DJANGO_CONFIGURATION}.txt"
-    su #{node['conda']['user']} -c "cd #{cvat}/cvat ; yes | #{node['conda']['dir']}/envs/cvat/bin/pip install ."
     EOF
 end
 
