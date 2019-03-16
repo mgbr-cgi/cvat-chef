@@ -34,6 +34,8 @@ end
 
 package "python-software-properties"
 package "software-properties-common"
+package "apache2"
+package "apache2-dev"
 
 apt_repository 'xerus-media' do
   uri "ppa:mc3man/xerus-media"
@@ -45,8 +47,6 @@ apt_repository 'ffmpeg' do
   action :add
 end
 
-package "apache2"
-package "apache2-dev"
 package "libapache2-mod-xsendfile"
 package "supervisor"
 package "ffmpeg"
