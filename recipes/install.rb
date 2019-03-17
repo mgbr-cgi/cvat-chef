@@ -35,11 +35,10 @@ end
 
 apt_update
 package "linux-base"
+packege "linux-image-generic"
+packege "linux-headers-generic"
 package "python-software-properties"
 package "software-properties-common"
-package "apache2"
-package "apache2-dev"
-package "libapache2-mod-xsendfile"
 package "supervisor"
 package "libldap2-dev"
 package "libsasl2-dev"
@@ -50,6 +49,9 @@ package "unrar"
 package "p7zip-full"
 package "git"
 package "expect"
+package "apache2"
+package "apache2-dev"
+package "libapache2-mod-xsendfile"
 
 apt_repository 'xerus-media' do
   uri "ppa:mc3man/xerus-media"
