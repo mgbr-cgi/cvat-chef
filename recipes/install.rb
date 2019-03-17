@@ -37,6 +37,19 @@ apt_update
 package "linux-base"
 package "python-software-properties"
 package "software-properties-common"
+package "apache2"
+package "apache2-dev"
+package "libapache2-mod-xsendfile"
+package "supervisor"
+package "libldap2-dev"
+package "libsasl2-dev"
+package "python3-dev"
+package "python3-pip"
+package "unzip"
+package "unrar"
+package "p7zip-full"
+package "git"
+package "expect"
 
 apt_repository 'xerus-media' do
   uri "ppa:mc3man/xerus-media"
@@ -48,21 +61,8 @@ apt_repository 'ffmpeg' do
   action :add
 end
 
-package "apache2"
-package "apache2-dev"
-package "libapache2-mod-xsendfile"
-package "supervisor"
 package "ffmpeg"
 package "gstreamer0.10-ffmpeg"
-package "libldap2-dev"
-package "libsasl2-dev"
-package "python3-dev"
-package "python3-pip"
-package "unzip"
-package "unrar"
-package "p7zip-full"
-package "git"
-package "expect"
 
 
 apt_repository 'xerus-media' do
