@@ -34,7 +34,7 @@ end
 
 
 apt_update
-
+package "linux-base"
 package "python-software-properties"
 package "software-properties-common"
 
