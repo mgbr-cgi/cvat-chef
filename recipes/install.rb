@@ -36,6 +36,11 @@ end
 apt_update
 package "linux-base"
 package "python-software-properties"
+execute 'force-linux-base' do
+  user 'root'
+  command "apt install linux-base -y"
+  action :run
+end
 package "software-properties-common"
 package "supervisor"
 package "libldap2-dev"
