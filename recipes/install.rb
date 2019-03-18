@@ -35,8 +35,6 @@ end
 
 apt_update
 package "linux-base"
-packege "linux-image-generic"
-packege "linux-headers-generic"
 package "python-software-properties"
 package "software-properties-common"
 package "supervisor"
