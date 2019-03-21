@@ -1,4 +1,4 @@
-#include_recipe "java"
+include_recipe "java"
 
 # User anaconda needs access to bin/hadoop to install Pydoop
 # This is a hack to get the hadoop group.
@@ -194,6 +194,10 @@ template systemd_script do
   owner "root"
   group "root"
   mode 0664
+  variables({
+              :java_home => node['java']['java_home']
+            })
+  
   if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => "#{service_name}")
   end

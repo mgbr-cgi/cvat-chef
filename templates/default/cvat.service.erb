@@ -6,6 +6,7 @@ After = syslog.target network.target remote-fs.target
 User = <%= node['cvat']['user'] %>
 Restart=always
 RestartSec=5
+Environment=JAVA_HOME=<%= @java_home %>
 Environment=HADOOP_HOME=<%= node['hops']['base_dir']%>
 Environment=HADOOP_CONF_DIR=<%= node['hops']['conf_dir']%>
 Environment=HADOOP_USER_NAME=<%= node['hops']['hdfs']['user']%>
