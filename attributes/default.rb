@@ -2,6 +2,7 @@
 include_attribute "conda"
 include_attribute "kagent"
 include_attribute "hops"
+include_attribute "tensorflow"
 
 default['cvat']['version']                      = "0.3.0"
 
