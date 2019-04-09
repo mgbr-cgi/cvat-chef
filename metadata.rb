@@ -12,6 +12,7 @@ supports 'centos', '= 7.5'
 depends           'java'
 depends            'kagent'
 depends            'hops'
+depends            'tensorflow'
 
 recipe "cvat::install", "Installs  cvat"
 recipe "cvat::default", "Configures cvat"
