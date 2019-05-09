@@ -153,6 +153,13 @@ end
 
 mysql_ip  = private_recipe_ip("ndb", "mysqld")
 
+template "/home/#{node['cvat']['user']}/cvat/cvat/settings/mysql.sql" do
+  source 'mysql.sql.erb'
+  owner node['cvat']['user']
+  group node['cvat']['group']
+  mode 0755
+end
+
 template "/home/#{node['cvat']['user']}/cvat/cvat/settings/development.py" do
   source "development.py.erb"
   owner node['cvat']['user']
@@ -163,20 +170,12 @@ template "/home/#{node['cvat']['user']}/cvat/cvat/settings/development.py" do
 end
 
 
-execute 'create_db' do
+execute 'create_mysql_db' do
   user 'root'
   cwd "/home/#{node['cvat']['user']}/cvat"
-  command "#{node['ndb']['scripts_dir']}/mysql-client.sh -e 'CREATE DATABASE IF NOT EXISTS django'"
+  command "#{node['ndb']['scripts_dir']}/mysql-client.sh < /home/#{node['cvat']['user']}/cvat/cvat/settings/mysql.sql" 
   action :run
 end
-
-execute 'create_db_user' do
-  user 'root'
-  cwd "/home/#{node['cvat']['user']}/cvat"
-  command "#{node['ndb']['scripts_dir']}/mysql-client.sh -e \"GRANT ALL PRIVILEGES ON django.* TO 'django'@'%' IDENTIFIED BY \\"#{node['django']['db_password']}\\"\""
-  action :run
-end
-
 
 execute 'turn_off_pks_bug_django' do
   user 'root'
@@ -205,6 +204,7 @@ execute 'createsuperuser' do
   command "/home/#{node['cvat']['user']}/create-superuser.sh"
   action :run
 end
+
 
 template "/home/#{node['cvat']['user']}/cvat-stop.sh" do
   source 'cvat-stop.sh.erb'
