@@ -160,7 +160,7 @@ end
 
 mysql_ip  = private_recipe_ip("ndb", "mysqld")
 
-template "/home/#{node['cvat']['user']}/cvat/development.py" do
+template "/home/#{node['cvat']['user']}/cvat/cvat/settings/development.py" do
   source "development.py.erb"
   owner node['cvat']['user']
   group node['cvat']['group']
