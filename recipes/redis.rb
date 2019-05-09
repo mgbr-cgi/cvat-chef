@@ -3,6 +3,29 @@
 # REDIS
 #
 
+directory node["redis"]["dir"]  do
+  owner node["cvat"]["user"]
+  group node["cvat"]["group"]
+  mode "755"
+  action :create
+  not_if { File.directory?("#{node["redis"]["dir"]}") }
+end
+
+directory node["redis"]["home"] do
+  owner node["cvat"]["user"]
+  group node["cvat"]["group"]
+  mode "750"
+  action :create
+end
+
+link node["redis"]["base_dir"] do
+  owner node["cvat"]["user"]
+  group node["cvat"]["group"]
+  to node["redis"]["home"]
+end
+
+
+
 bash "install_redis" do
   user 'root'
   umask "022"

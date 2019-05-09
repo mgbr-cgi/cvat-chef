@@ -85,8 +85,7 @@ home="/home/#{node['cvat']['user']}"
 cvat="#{home}/cvat"
 git cvat do
    repository 'https://github.com/logicalclocks/cvat.git'
-   #   revision "v" + node['cvat']['version']
-   checkout_branch "miguel"
+   checkout_branch node['cvat']['branch']
    action :sync
    user node['cvat']['user']
    group node['cvat']['group']

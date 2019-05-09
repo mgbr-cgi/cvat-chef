@@ -3,6 +3,7 @@ include_attribute "conda"
 include_attribute "kagent"
 include_attribute "hops"
 include_attribute "tensorflow"
+include_attribute "ndb"
 
 default['cvat']['version']                      = "0.3.0"
 
@@ -24,3 +25,10 @@ default['cvat']['django_config']                = "development" # base, developm
 default['cvat']['admin_user']                   = "admin"
 
 default['cvat']['admin_password']               = "cvat2019"
+
+default['django']['db_password']                = "django2019"
+
+default['redis']['dir']                         = node['install']['dir'].empty? ? "/srv/hops" : node['install']['dir'] 
+default['redis']['base_dir']                    = "#{node['redis']['dir']}/redis"
+
+default['cvat']['branch']                       = "develop"

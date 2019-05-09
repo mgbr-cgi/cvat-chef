@@ -13,6 +13,7 @@ depends           'java'
 depends            'kagent'
 depends            'hops'
 depends            'tensorflow'
+depends            'ndb'
 
 recipe "cvat::install", "Installs  cvat"
 recipe "cvat::default", "Configures cvat"
@@ -50,5 +51,13 @@ attribute "cvat/admin_user",
           :type => 'string'
 
 attribute "cvat/admin_password",
-          :description => "Admin username for cvat",
+          :description => "Admin password for cvat",
+          :type => 'string'
+
+attribute "django/db_password",
+          :description => "MySQL database password for the 'django' user",
+          :type => 'string'
+
+attribute "cvat/branch",
+          :description => "Default 'develop'",
           :type => 'string'
