@@ -173,7 +173,7 @@ end
 execute 'create_db_user' do
   user 'root'
   cwd "/home/#{node['cvat']['user']}/cvat"
-  command "#{node['ndb']['scripts_dir']}/mysql-client.sh -e \"GRANT ALL PRIVILEGES ON django.* TO 'django'@'%' IDENTIFIED BY \"#{node['django']['db_password']}\"\""
+  command "#{node['ndb']['scripts_dir']}/mysql-client.sh -e \"GRANT ALL PRIVILEGES ON django.* TO 'django'@'%' IDENTIFIED BY \"\"#{node['django']['db_password']}\"\"\""
   action :run
 end
 
