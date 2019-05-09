@@ -133,6 +133,14 @@ execute 'chown' do
 end
 
 
+execute 'install_mysql' do
+  user node['conda']['user']
+  cwd "/home/#{node['cvat']['user']}"  
+  command "#{node['conda']['dir']}/envs/cvat/bin/pip install mysqlclient"
+  action :run
+end
+
+
 execute 'mkdir_supervisord' do
   user node['cvat']['user']
   cwd "/home/#{node['cvat']['user']}/cvat"  
@@ -160,6 +168,22 @@ template "/home/#{node['cvat']['user']}/cvat/development.py" do
   action :create
   variables({ :mysql_ip => mysql_ip })
 end
+
+
+execute 'create_db' do
+  user 'root'
+  cwd "/home/#{node['cvat']['user']}/cvat"
+  command "#{node['ndb']['scripts_dir']}/mysql-client.sh -e 'CREATE DATABASE IF NOT EXISTS django'"
+  action :run
+end
+
+execute 'create_db_user' do
+  user 'root'
+  cwd "/home/#{node['cvat']['user']}/cvat"
+  command "#{node['ndb']['scripts_dir']}/mysql-client.sh -e \"GRANT ALL PRIVILEGES ON django.* TO 'django'@'%' IDENTIFIED BY #{node['django']['db_password']}\""
+  action :run
+end
+
 
 execute 'turn_off_pks_bug_django' do
   user 'root'
