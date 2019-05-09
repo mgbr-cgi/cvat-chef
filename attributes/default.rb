@@ -28,7 +28,10 @@ default['cvat']['admin_password']               = "cvat2019"
 
 default['django']['db_password']                = "django2019"
 
+
+default['redis']['version']                     = "5.0"
 default['redis']['dir']                         = node['install']['dir'].empty? ? "/srv/hops" : node['install']['dir'] 
+default['redis']['home']                        = "#{node['redis']['dir']}/redis-#{node['redis']['version']}"
 default['redis']['base_dir']                    = "#{node['redis']['dir']}/redis"
 
 default['cvat']['branch']                       = "develop"
