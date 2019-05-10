@@ -117,6 +117,7 @@ end
 #   action :run
 # end
 
+
 execute 'patch' do
   user node['cvat']['user']
   cwd "/home/#{node['cvat']['user']}/cvat"
@@ -184,29 +185,6 @@ execute 'turn_off_pks_bug_django' do
   action :run
 end
 
-# Currently breaks on incorrectly formatted foreign key constraint
-#execute 'migrate' do
-#  user node['cvat']['user']
-#  cwd "/home/#{node['cvat']['user']}/cvat"  
-#  command "#{node['conda']['dir']}/envs/cvat/bin/python manage.py migrate"
-#  action :run
-#end
-
-execute 'turn_on_pks_bug_django' do
-  user 'root'
-  cwd "/home/#{node['cvat']['user']}/cvat"
-  command "#{node['ndb']['scripts_dir']}/mysql-client.sh -e 'SET GLOBAL FOREIGN_KEY_CHECKS=1 ; SET GLOBAL default_storage_engine=NDBCLUSTER;'"
-  action :run
-end
-
-execute 'createsuperuser' do
-  user node['cvat']['user']
-  cwd "/home/#{node['cvat']['user']}"    
-  command "/home/#{node['cvat']['user']}/create-superuser.sh"
-  action :run
-end
-
-
 template "/home/#{node['cvat']['user']}/cvat-stop.sh" do
   source 'cvat-stop.sh.erb'
   owner node['cvat']['user']
@@ -265,3 +243,27 @@ end
 
 
 include_recipe "cvat::redis"
+
+execute 'createsuperuser' do
+  user node['cvat']['user']
+  cwd "/home/#{node['cvat']['user']}"    
+  command "/home/#{node['cvat']['user']}/create-superuser.sh"
+  action :run
+end
+
+
+# Currently breaks on incorrectly formatted foreign key constraint
+
+# execute 'migrate' do
+#  user node['cvat']['user']
+#  cwd "/home/#{node['cvat']['user']}/cvat"  
+#  command "#{node['conda']['dir']}/envs/cvat/bin/python ./manage.py migrate"
+#  action :run
+# end
+
+execute 'turn_on_pks_bug_django' do
+  user 'root'
+  cwd "/home/#{node['cvat']['user']}/cvat"
+  command "#{node['ndb']['scripts_dir']}/mysql-client.sh -e 'SET GLOBAL FOREIGN_KEY_CHECKS=1 ; SET GLOBAL default_storage_engine=NDBCLUSTER;'"
+  action :run
+end
