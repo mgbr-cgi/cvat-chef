@@ -1,5 +1,5 @@
 CREATE DATABASE IF NOT EXISTS django;
 
-CREATE USER 'django'@'%' IDENTIFIED BY "<%= node['django']['db_password'] %>";
+CREATE USER IF NOT EXISTS 'django'@'%' IDENTIFIED BY "<%= node['django']['db_password'] %>";
 
 GRANT ALL PRIVILEGES ON django.* TO 'django'@'%';
