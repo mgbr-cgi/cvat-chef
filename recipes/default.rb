@@ -194,7 +194,7 @@ end
 execute 'turn_on_pks_bug_django' do
   user 'root'
   cwd "/home/#{node['cvat']['user']}/cvat"
-  command "#{node['ndb']['scripts_dir']}/mysql-client.sh -e 'SET GLOBAL FOREIGN_KEY_CHECKS=1'"
+  command "#{node['ndb']['scripts_dir']}/mysql-client.sh -e 'SET GLOBAL FOREIGN_KEY_CHECKS=1 ; SET GLOBAL default_storage_engine=NDBCLUSTER;'"
   action :run
 end
 
