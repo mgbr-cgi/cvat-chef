@@ -180,16 +180,17 @@ end
 execute 'turn_off_pks_bug_django' do
   user 'root'
   cwd "/home/#{node['cvat']['user']}/cvat"
-  command "#{node['ndb']['scripts_dir']}/mysql-client.sh -e 'SET GLOBAL FOREIGN_KEY_CHECKS=0'"
+  command "#{node['ndb']['scripts_dir']}/mysql-client.sh -e 'SET GLOBAL FOREIGN_KEY_CHECKS=0; SET GLOBAL default_storage_engine=INNODB; '"
   action :run
 end
 
-execute 'migrate' do
-  user node['cvat']['user']
-  cwd "/home/#{node['cvat']['user']}/cvat"  
-  command "#{node['conda']['dir']}/envs/cvat/bin/python manage.py migrate"
-  action :run
-end
+# Currently breaks on incorrectly formatted foreign key constraint
+#execute 'migrate' do
+#  user node['cvat']['user']
+#  cwd "/home/#{node['cvat']['user']}/cvat"  
+#  command "#{node['conda']['dir']}/envs/cvat/bin/python manage.py migrate"
+#  action :run
+#end
 
 execute 'turn_on_pks_bug_django' do
   user 'root'
