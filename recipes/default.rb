@@ -254,12 +254,12 @@ include_recipe "cvat::redis"
 
 # Currently breaks on incorrectly formatted foreign key constraint
 
-# execute 'migrate' do
-#  user node['cvat']['user']
-#  cwd "/home/#{node['cvat']['user']}/cvat"  
-#  command "#{node['conda']['dir']}/envs/cvat/bin/python ./manage.py migrate"
-#  action :run
-# end
+ execute 'migrate' do
+  user node['cvat']['user']
+  cwd "/home/#{node['cvat']['user']}/cvat"  
+  command "#{node['conda']['dir']}/envs/cvat/bin/python ./manage.py migrate"
+  action :run
+ end
 
 execute 'turn_on_pks_bug_django' do
   user 'root'
