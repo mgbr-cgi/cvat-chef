@@ -5,7 +5,7 @@ include_attribute "hops"
 include_attribute "tensorflow"
 include_attribute "ndb"
 
-default['cvat']['version']                      = "0.3.0"
+default['cvat']['version']                      = "0.4.0"
 
 default['cvat']['user']                         = node['install']['user'].empty? ? 'cvat' : node['install']['user']
 default['cvat']['group']                        = node['install']['user'].empty? ? 'cvat' : node['install']['user']
@@ -34,4 +34,4 @@ default['redis']['dir']                         = node['install']['dir'].empty? 
 default['redis']['home']                        = "#{node['redis']['dir']}/redis-#{node['redis']['version']}"
 default['redis']['base_dir']                    = "#{node['redis']['dir']}/redis"
 
-default['cvat']['branch']                       = "develop"
+default['cvat']['branch']                       = "v" + node['cvat']['version']
