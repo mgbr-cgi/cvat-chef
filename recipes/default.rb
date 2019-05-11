@@ -244,12 +244,12 @@ end
 
 include_recipe "cvat::redis"
 
-execute 'createsuperuser' do
-  user node['cvat']['user']
-  cwd "/home/#{node['cvat']['user']}"    
-  command "/home/#{node['cvat']['user']}/create-superuser.sh"
-  action :run
-end
+# execute 'createsuperuser' do
+#   user node['cvat']['user']
+#   cwd "/home/#{node['cvat']['user']}"    
+#   command "/home/#{node['cvat']['user']}/create-superuser.sh"
+#   action :run
+# end
 
 
 # Currently breaks on incorrectly formatted foreign key constraint
