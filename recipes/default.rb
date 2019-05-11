@@ -161,7 +161,7 @@ template "/home/#{node['cvat']['user']}/cvat/cvat/settings/mysql.sql" do
   mode 0755
 end
 
-template "/home/#{node['cvat']['user']}/cvat/cvat/settings/development.py" do
+template "/home/#{node['cvat']['user']}/cvat/cvat/settings/development.py.mysql" do
   source "development.py.erb"
   owner node['cvat']['user']
   group node['cvat']['group']
