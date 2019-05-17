@@ -35,7 +35,7 @@ end
 
 apt_update
 package "linux-base"
-package "python-software-properties"
+package "python3-software-properties"
 execute 'force-linux-base' do
   user 'root'
   command "apt install linux-base -y"
