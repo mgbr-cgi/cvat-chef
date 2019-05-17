@@ -56,29 +56,7 @@ package "apache2"
 package "apache2-dev"
 package "libapache2-mod-xsendfile"
 
-apt_repository 'xerus-media' do
-  uri "ppa:mc3man/xerus-media"
-  action :add
-end
 
-apt_repository 'ffmpeg' do
-  uri "ppa:mc3man/gstffmpeg-keep"
-  action :add
-end
-
-package "ffmpeg"
-package "gstreamer0.10-ffmpeg"
-
-
-apt_repository 'xerus-media' do
-  uri "ppa:mc3man/xerus-media"
-  action :remove
-end
-
-apt_repository 'ffmpeg' do
-  uri "ppa:mc3man/gstffmpeg-keep"
-  action :remove
-end
                              
 home="/home/#{node['cvat']['user']}"
 
