@@ -85,8 +85,8 @@ execute 'run_openvino' do
 end
 
 execute 'run_cuda' do
-  user node['root']['user']
-  command "/tmp/components/cuda/install.sh"
+  user node['cvat']['user']
+  command "sudo /tmp/components/cuda/install.sh"
   action :run
   environment ({'CUDA_SUPPORT' => 'yes'})  
   only_if { "#{node['cvat']['cuda']}" == "true" }
